@@ -1,0 +1,106 @@
+group 'org.jbuilder'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+ext{
+    // java文件编码方式设置为utf-8
+    compileJava.options.encoding = 'UTF-8'
+    //compileTestJava.options.encoding = 'UTF-8'
+    sourceCompatibility = 1.6
+    springVersion = '4.3.2.RELEASE'
+    jettyVersion = '9.2.18.v20160721'
+
+}
+
+//defaultTasks 'clean', 'jar'
+repositories {
+    maven {
+        url "http://localhost:8081/repository/maven-public"
+    }
+}
+
+//指定运行的主类入口
+mainClassName = "org.jbuilder.ylog.Application"
+
+task runApp(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'org.jbuilder.ylog.Application'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "$mainClassName"
+    }
+
+    from ({
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }) {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+
+}
+
+tasks.withType(Jar) {
+    def seen = [:]
+    eachFile {
+        if (seen.containsKey(it.path)) {
+            it.exclude()
+        } else {
+            seen[it.path] = true
+        }
+    }
+}
+
+dependencies {
+
+    compile(
+            "org.springframework:spring-web:$springVersion",
+            "org.springframework:spring-webmvc:$springVersion",
+            "org.springframework:spring-jdbc:$springVersion",
+            "org.eclipse.jetty:jetty-webapp:$jettyVersion",
+            "org.eclipse.jetty:jetty-jsp:$jettyVersion",
+            'org.mybatis:mybatis-spring:1.3.0',
+            'org.mybatis:mybatis:3.4.1',
+            'mysql:mysql-connector-java:6.0.3',
+            'com.codahale.metrics:metrics-core:3.0.2',
+            'com.codahale.metrics:metrics-servlets:3.0.2',
+            'c3p0:c3p0:0.9.1.2',
+            'com.github.pagehelper:pagehelper:4.1.6',
+            'javax.servlet:javax.servlet-api:3.1.0',
+            'org.apache.shiro:shiro-core:1.3.0',
+            'org.apache.shiro:shiro-web:1.3.0',
+            'org.apache.commons:commons-lang3:3.4',
+            'org.jasypt:jasypt:1.9.2',
+            'javax.servlet:jstl:1.2',
+            'commons-fileupload:commons-fileupload:1.3.2',
+            'org.apache.commons:commons-exec:1.3',
+            'org.slf4j:slf4j-api:1.7.21',
+            'org.slf4j:slf4j-simple:1.7.21'
+    )
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+//指定idea的jdk版本
+idea {
+    module {
+        jdkName = '1.8'
+    }
+}

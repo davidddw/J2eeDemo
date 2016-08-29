@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ylogG.iml" filepath="$PROJECT_DIR$/.idea/modules/ylogG.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ylogG_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ylogG_main.iml" group="ylogG" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ylogG_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ylogG_test.iml" group="ylogG" />
+    </modules>
+  </component>
+</project>
